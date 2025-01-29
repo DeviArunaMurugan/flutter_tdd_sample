@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tdd_sample/stringcalculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_tdd_sample/main.dart';
@@ -26,5 +27,39 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+  });
+
+  group('String Calculator Add function', () {
+    test('returns 0 for an empty string', () {
+      expect(StringCalculator.add(''), equals(0));
+    });
+
+    test('returns the number itself when only one number is provided', () {
+      expect(StringCalculator.add('1'), equals(1));
+    });
+
+    test('returns the sum of two numbers separated by a comma', () {
+      expect(StringCalculator.add('1,2'), equals(3));
+    });
+
+    test('handles new lines between numbers', () {
+      expect(StringCalculator.add('1\n2,3'), equals(6));
+    });
+
+    test('supports different delimiters', () {
+      expect(StringCalculator.add('//;\n1;2'), equals(3));
+    });
+
+    test('supports delimiters of any length', () {
+      expect(StringCalculator.add('//[***]\n1***2***3'), equals(6));
+    });
+
+    test('supports multiple delimiters', () {
+      expect(StringCalculator.add('//[*][%]\n1*2%3'), equals(6));
+    });
+
+    test('supports multiple delimiters with length longer than one char', () {
+      expect(StringCalculator.add('//[***][#][%]\n1***2#3%4'), equals(10));
+    });
   });
 }
